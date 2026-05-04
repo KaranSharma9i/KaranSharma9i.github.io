@@ -696,6 +696,127 @@
             line-height: 1.6
         }
 
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 15, 23, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--subtle);
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal-title {
+            font-family: var(--heading);
+            font-size: 24px;
+            margin-bottom: 12px;
+            padding-right: 30px;
+        }
+
+        .modal-desc {
+            color: var(--subtle);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-section-title {
+            font-family: var(--heading);
+            font-size: 16px;
+            margin-bottom: 8px;
+            margin-top: 20px;
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .modal-tags span {
+            background: var(--bg);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: var(--text);
+            font-weight: 500;
+            border: 1px solid var(--border);
+        }
+
+        .modal-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: rgba(226, 117, 0, 0.1);
+            color: var(--primary);
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .modal-links a:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
         /* ── Responsive ── */
         @media(max-width:768px) {
             .hero-inner {
@@ -776,7 +897,7 @@
         <a href="#skills">Skills</a>
         <a href="#about">About</a>
         <a href="#portfolio">Portfolio</a>
-        <a href="#blogs">Blogs</a>
+        <a href="#blogs">Reports & Blogs</a>
         <a href="#contact" class="cta"><i class="fa-solid fa-star"></i>Contact me</a>
     </nav>
 
@@ -856,7 +977,7 @@
     <!-- Blogs -->
     <section class="section" id="blogs">
         <span class="section-label reveal">Insights & write-ups</span>
-        <h2 class="section-title reveal">Blogs</h2>
+        <h2 class="section-title reveal">Reports & Blogs</h2>
         <div class="projects-grid" id="blogsGrid"></div>
     </section>
 
@@ -870,6 +991,9 @@
                 <p>I'm always open to discussing data analysis projects, collaboration opportunities, or just having a
                     chat about the latest in data science.</p>
                 <div class="social-links">
+                    <a href="https://www.linkedin.com/in/karansharma9i/" target="_blank"><i
+                            class="fa-brands fa-linkedin"></i>LinkedIn
+                        — KaranSharma9i</a>
                     <a href="https://github.com/KaranSharma9i" target="_blank"><i class="fa-brands fa-github"></i>GitHub
                         — KaranSharma9i</a>
                     <a href="https://wa.me/+916397435431" target="_blank"><i class="fa-brands fa-whatsapp"></i>WhatsApp
@@ -892,6 +1016,19 @@
             </form>
         </div>
     </section>
+
+    <!-- Project Modal -->
+    <div class="modal-overlay" id="projectModal">
+        <div class="modal-content">
+            <i class="fa-solid fa-xmark modal-close" id="closeModal"></i>
+            <h3 class="modal-title" id="modalTitle">Project Title</h3>
+            <p class="modal-desc" id="modalDesc">Project description goes here.</p>
+            <div class="modal-section-title">Tools Used</div>
+            <div class="modal-tags" id="modalTags"></div>
+            <div class="modal-section-title" id="modalLinksTitle">Project Links</div>
+            <div class="modal-links" id="modalLinks"></div>
+        </div>
+    </div>
 
     <footer>
         <p>&copy; 2025 Karan <span>Sharma</span>. Crafted with precision & data.</p>
@@ -960,15 +1097,25 @@
         ];
 
         const projects = [
-            { title: 'What Makes a Game Successful on STEAM', desc: 'Analysed thousands of STEAM game listings to identify key factors driving commercial success — including pricing strategies, genre trends, and review sentiment patterns.', tags: ['Python', 'Pandas', 'Plotly', 'EDA'] },
-            { title: 'Customer Churn Analysis', desc: 'Built a churn prediction model for a telecom dataset, identifying at-risk customer segments using logistic regression and decision trees with feature importance analysis.', tags: ['Python', 'Scikit-learn', 'Seaborn', 'SQL'] },
-            { title: 'Brazilian E-Commerce Sales Analysis', desc: 'Explored the Olist public dataset to uncover regional sales patterns, delivery performance bottlenecks, and customer satisfaction drivers across Brazilian states.', tags: ['Python', 'Pandas', 'Plotly', 'PostgreSQL'] },
-            { title: 'COVID-19 Data Exploration', desc: 'Tracked pandemic trends across countries using time-series analysis, rolling averages, and interactive dashboards to visualise infection and vaccination rates.', tags: ['Python', 'Plotly', 'Pandas', 'NumPy'] },
-            { title: 'HR Employee Attrition Dashboard', desc: 'Designed an interactive Power BI dashboard to help HR teams identify attrition risk factors such as overtime, job satisfaction, and tenure patterns.', tags: ['Power BI', 'DAX', 'Power Query', 'Excel'] },
-            { title: 'Credit Risk Assessment', desc: 'Developed a scoring model to assess loan default probability using statistical tests, correlation analysis, and weighted risk indicators.', tags: ['Python', 'SciPy', 'Pandas', 'Matplotlib'] },
-            { title: 'Social Media Sentiment Tracker', desc: 'Analysed tweet sentiment around product launches using NLP techniques, visualising public opinion shifts over time with interactive charts.', tags: ['Python', 'NLTK', 'Plotly', 'Pandas'] },
-            { title: 'Weather & Climate Pattern Analysis', desc: 'Examined 50 years of meteorological data to identify climate trends, seasonal anomalies, and temperature distribution shifts using inferential statistics.', tags: ['Python', 'SciPy', 'Seaborn', 'NumPy'] },
-            { title: 'Retail Sales Forecasting Dashboard', desc: 'Built an end-to-end sales forecasting pipeline for a retail chain, combining time-series decomposition with interactive Tableau dashboards to predict quarterly revenue trends.', tags: ['Python', 'Tableau', 'Pandas', 'Excel'] },
+            {
+                title: 'What Makes a Game Successful on STEAM',
+                desc: 'Analysed thousands of STEAM game listings to identify key factors driving commercial success — including pricing strategies, genre trends, and review sentiment patterns.',
+                tags: ['Python', 'Pandas', 'Plotly', 'EDA'],
+                image: 'steam.png',
+                links: [
+                    { name: 'Data Cleaning (Google Colab)', url: 'https://colab.research.google.com/drive/1T3GTCzWstU0WgER0LTJgy3Pz2l8MV5yI?usp=sharing', icon: 'fa-brands fa-google' },
+                    { name: 'EDA (Google Colab)', url: 'https://colab.research.google.com/drive/13beB9fNTaDca1PSp9FUr8bxzlBj55IDP?authuser=2', icon: 'fa-brands fa-google' },
+                    { name: 'PDF Report (Google Drive)', url: 'https://drive.google.com/file/d/1Y8FC9G-q1Qy_1mJgVJGYa6xreauq96lm/view', icon: 'fa-brands fa-google-drive' }
+                ]
+            },
+            { title: 'Customer Churn Analysis', desc: 'Built a churn prediction model for a telecom dataset, identifying at-risk customer segments using logistic regression and decision trees with feature importance analysis.', tags: ['Python', 'Scikit-learn', 'Seaborn', 'SQL'], links: [] },
+            { title: 'Brazilian E-Commerce Sales Analysis', desc: 'Explored the Olist public dataset to uncover regional sales patterns, delivery performance bottlenecks, and customer satisfaction drivers across Brazilian states.', tags: ['Python', 'Pandas', 'Plotly', 'PostgreSQL'], links: [] },
+            { title: 'COVID-19 Data Exploration', desc: 'Tracked pandemic trends across countries using time-series analysis, rolling averages, and interactive dashboards to visualise infection and vaccination rates.', tags: ['Python', 'Plotly', 'Pandas', 'NumPy'], links: [] },
+            { title: 'HR Employee Attrition Dashboard', desc: 'Designed an interactive Power BI dashboard to help HR teams identify attrition risk factors such as overtime, job satisfaction, and tenure patterns.', tags: ['Power BI', 'DAX', 'Power Query', 'Excel'], links: [] },
+            { title: 'Credit Risk Assessment', desc: 'Developed a scoring model to assess loan default probability using statistical tests, correlation analysis, and weighted risk indicators.', tags: ['Python', 'SciPy', 'Pandas', 'Matplotlib'], links: [] },
+            { title: 'Social Media Sentiment Tracker', desc: 'Analysed tweet sentiment around product launches using NLP techniques, visualising public opinion shifts over time with interactive charts.', tags: ['Python', 'NLTK', 'Plotly', 'Pandas'], links: [] },
+            { title: 'Weather & Climate Pattern Analysis', desc: 'Examined 50 years of meteorological data to identify climate trends, seasonal anomalies, and temperature distribution shifts using inferential statistics.', tags: ['Python', 'SciPy', 'Seaborn', 'NumPy'], links: [] },
+            { title: 'Retail Sales Forecasting Dashboard', desc: 'Built an end-to-end sales forecasting pipeline for a retail chain, combining time-series decomposition with interactive Tableau dashboards to predict quarterly revenue trends.', tags: ['Python', 'Tableau', 'Pandas', 'Excel'], links: [] },
         ];
 
         // ── Render Skills ──
@@ -987,27 +1134,72 @@
         projects.forEach((p, i) => {
             const card = document.createElement('div'); card.className = 'project-card reveal';
             card.style.transitionDelay = `${i * 0.06}s`;
-            card.innerHTML = `<div class="spot"></div><div class="project-thumb" style="background:linear-gradient(135deg,${colors[i % 9]},${colors[(i + 3) % 9]})"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;opacity:.3">📊</div></div><div class="project-body"><div class="project-title">${p.title}</div><div class="project-desc">${p.desc}</div><div class="project-tags">${p.tags.map(t => `<span>${t}</span>`).join('')}</div></div>`;
+            let thumbHTML = p.image
+                ? `<div class="project-thumb"><img src="${p.image}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;"></div>`
+                : `<div class="project-thumb" style="background:linear-gradient(135deg,${colors[i % 9]},${colors[(i + 3) % 9]})"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;opacity:.3">📊</div></div>`;
+            card.innerHTML = `<div class="spot"></div>${thumbHTML}<div class="project-body"><div class="project-title">${p.title}</div><div class="project-desc">${p.desc}</div><div class="project-tags">${p.tags.map(t => `<span>${t}</span>`).join('')}</div></div>`;
+            card.addEventListener('click', () => openProjectModal(p));
             projectsGrid.appendChild(card);
+        });
+
+        // ── Modal Logic ──
+        const modalOverlay = document.getElementById('projectModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalTags = document.getElementById('modalTags');
+        const modalLinks = document.getElementById('modalLinks');
+        const modalLinksTitle = document.getElementById('modalLinksTitle');
+
+        function openProjectModal(project) {
+            modalTitle.textContent = project.title;
+            modalDesc.textContent = project.desc;
+            modalTags.innerHTML = project.tags.map(t => `<span>${t}</span>`).join('');
+
+            if (project.links && project.links.length > 0) {
+                modalLinksTitle.style.display = 'block';
+                modalLinks.innerHTML = project.links.map(l => `<a href="${l.url}" target="_blank"><i class="${l.icon}"></i> ${l.name}</a>`).join('');
+            } else {
+                modalLinksTitle.style.display = 'none';
+                modalLinks.innerHTML = '';
+            }
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        closeModal.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
         });
 
         // ── Render Blogs ──
         const blogTopics = [
-            { title: 'What Makes a Game Successful on STEAM', slug: 'steam-success', color: '#FFE8CC' },
-            { title: 'Customer Churn Analysis', slug: 'churn-analysis', color: '#D4EDDA' },
-            { title: 'Brazilian E-Commerce Sales Analysis', slug: 'brazil-ecommerce', color: '#CCE5FF' },
-            { title: 'COVID-19 Data Exploration', slug: 'covid-data', color: '#F5D5CB' },
-            { title: 'HR Employee Attrition Dashboard', slug: 'hr-attrition', color: '#E8DAEF' },
-            { title: 'Credit Risk Assessment', slug: 'credit-risk', color: '#D5F5E3' },
-            { title: 'Social Media Sentiment Tracker', slug: 'sentiment-tracker', color: '#FDEBD0' },
-            { title: 'Weather & Climate Pattern Analysis', slug: 'weather-climate', color: '#D6EAF8' },
-            { title: 'Retail Sales Forecasting Dashboard', slug: 'retail-forecast', color: '#E8F8F5' },
+            { title: 'What Makes a Game Successful on STEAM', link: 'https://drive.google.com/file/d/1Y8FC9G-q1Qy_1mJgVJGYa6xreauq96lm/view', color: '#FFE8CC', image: 'steam.png' },
+            { title: 'Customer Churn Analysis', link: 'blogs.html#churn-analysis', color: '#D4EDDA' },
+            { title: 'Brazilian E-Commerce Sales Analysis', link: 'blogs.html#brazil-ecommerce', color: '#CCE5FF' },
+            { title: 'COVID-19 Data Exploration', link: 'blogs.html#covid-data', color: '#F5D5CB' },
+            { title: 'HR Employee Attrition Dashboard', link: 'blogs.html#hr-attrition', color: '#E8DAEF' },
+            { title: 'Credit Risk Assessment', link: 'blogs.html#credit-risk', color: '#D5F5E3' },
+            { title: 'Social Media Sentiment Tracker', link: 'blogs.html#sentiment-tracker', color: '#FDEBD0' },
+            { title: 'Weather & Climate Pattern Analysis', link: 'blogs.html#weather-climate', color: '#D6EAF8' },
+            { title: 'Retail Sales Forecasting Dashboard', link: 'blogs.html#retail-forecast', color: '#E8F8F5' },
         ];
         const blogsGrid = document.getElementById('blogsGrid');
         blogTopics.forEach((b, i) => {
             const card = document.createElement('a'); card.className = 'project-card reveal';
-            card.href = `blogs.html#${b.slug}`; card.style.transitionDelay = `${i * 0.06}s`;
-            card.innerHTML = `<div class="spot"></div><div class="project-thumb" style="background:linear-gradient(135deg,${b.color},${colors[(i + 4) % 9]})"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;opacity:.3">✍️</div></div><div class="project-body"><div class="project-title">${b.title}</div><div class="project-desc">Read my analysis and insights on this topic →</div></div>`;
+            card.href = b.link;
+            card.target = b.link.startsWith('http') ? "_blank" : "_self";
+            card.style.transitionDelay = `${i * 0.06}s`;
+            let thumbHTML = b.image
+                ? `<div class="project-thumb"><img src="${b.image}" alt="${b.title}" style="width:100%;height:100%;object-fit:cover;"></div>`
+                : `<div class="project-thumb" style="background:linear-gradient(135deg,${b.color},${colors[(i + 4) % 9]})"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;opacity:.3">✍️</div></div>`;
+            card.innerHTML = `<div class="spot"></div>${thumbHTML}<div class="project-body"><div class="project-title">${b.title}</div><div class="project-desc">Read my analysis and insights on this topic →</div></div>`;
             blogsGrid.appendChild(card);
         });
 
@@ -1073,8 +1265,8 @@
     </script>
 </body>
 
-<<<<<<< HEAD
-</html>
-=======
+<<<<<<< HEAD </html>
+    =======
+
 </html>
 >>>>>>> 9b0a222 (initial local push)

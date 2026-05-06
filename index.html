@@ -817,6 +817,18 @@
             transform: translateY(-2px);
         }
 
+        .modal-note {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: rgba(226, 117, 0, 0.08);
+            border-left: 3px solid var(--primary);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--subtle);
+            font-style: italic;
+            display: none;
+        }
+
         /* ── Responsive ── */
         @media(max-width:768px) {
             .hero-inner {
@@ -1021,6 +1033,7 @@
             <div class="modal-tags" id="modalTags"></div>
             <div class="modal-section-title" id="modalLinksTitle">Project Links</div>
             <div class="modal-links" id="modalLinks"></div>
+            <div class="modal-note" id="modalNote"></div>
         </div>
     </div>
 
@@ -1111,7 +1124,17 @@
                     { name: 'SQL Code (GitHub)', url: 'https://github.com/KaranSharma9i/SQL-e-commerce/blob/main/e-commerce-project.sql', icon: 'fa-brands fa-github' }
                 ]
             },
-            { title: 'Customer Churn Analysis', desc: 'Built a churn prediction model for a telecom dataset, identifying at-risk customer segments using logistic regression and decision trees with feature importance analysis.', tags: ['Python', 'Scikit-learn', 'Seaborn', 'SQL'], links: [] },
+            {
+                title: 'AI Adoption Executive Dashboard',
+                desc: 'An interactive Power BI dashboard designed to help executives track, analyse, and drive AI adoption across departments. Visualises adoption metrics, readiness scores, and strategic insights to support data-driven decision-making. Built entirely in Power BI with advanced DAX measures and custom visuals.',
+                tags: ['Power BI', 'Data Visualisation'],
+                image: 'Ai_banner.png',
+                note: 'Power BI does not offer shareable links for free users — if you\'d like to see or check the file, please contact me through the contact section below.',
+                links: [
+                    { name: 'Watch Walkthrough on YouTube', url: 'https://youtu.be/bFbA_kTIujQ', icon: 'fa-brands fa-youtube' },
+                    { name: 'Download .pbix File', url: 'AI_adoption.pbix', icon: 'fa-solid fa-file-arrow-down', download: true }
+                ]
+            },
             { title: 'Brazilian E-Commerce Sales Analysis', desc: 'Explored the Olist public dataset to uncover regional sales patterns, delivery performance bottlenecks, and customer satisfaction drivers across Brazilian states.', tags: ['Python', 'Pandas', 'Plotly', 'PostgreSQL'], links: [] },
             { title: 'COVID-19 Data Exploration', desc: 'Tracked pandemic trends across countries using time-series analysis, rolling averages, and interactive dashboards to visualise infection and vaccination rates.', tags: ['Python', 'Plotly', 'Pandas', 'NumPy'], links: [] },
             { title: 'HR Employee Attrition Dashboard', desc: 'Designed an interactive Power BI dashboard to help HR teams identify attrition risk factors such as overtime, job satisfaction, and tenure patterns.', tags: ['Power BI', 'DAX', 'Power Query', 'Excel'], links: [] },
@@ -1161,11 +1184,24 @@
 
             if (project.links && project.links.length > 0) {
                 modalLinksTitle.style.display = 'block';
-                modalLinks.innerHTML = project.links.map(l => `<a href="${l.url}" target="_blank"><i class="${l.icon}"></i> ${l.name}</a>`).join('');
+                modalLinks.innerHTML = project.links.map(l => {
+                    const dl = l.download ? 'download' : '';
+                    const target = l.download ? '_self' : '_blank';
+                    return `<a href="${l.url}" target="${target}" ${dl}><i class="${l.icon}"></i> ${l.name}</a>`;
+                }).join('');
             } else {
                 modalLinksTitle.style.display = 'none';
                 modalLinks.innerHTML = '';
             }
+
+            const modalNote = document.getElementById('modalNote');
+            if (project.note) {
+                modalNote.innerHTML = '📌 ' + project.note;
+                modalNote.style.display = 'block';
+            } else {
+                modalNote.style.display = 'none';
+            }
+
             modalOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         }

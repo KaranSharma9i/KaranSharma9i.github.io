@@ -259,74 +259,98 @@
         }
 
         /* ── Skills ── */
-        .skills-grid {
+        .skills-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 18px
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            perspective: 1200px;
         }
 
-        .skill-card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 26px;
-            box-shadow: var(--shadow);
-            transition: all .4s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            border: 1px solid var(--border)
-        }
-
-        .skill-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1)
-        }
-
-        .skill-card .spot {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity .3s;
-            pointer-events: none;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(226, 117, 0, 0.12), transparent 60%)
-        }
-
-        .skill-card:hover .spot {
-            opacity: 1
-        }
-
-        .skill-icon {
-            font-size: 28px;
-            margin-bottom: 10px;
-            display: block
-        }
-
-        .skill-name {
-            font-family: var(--heading);
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 6px
-        }
-
-        .skill-level {
-            font-size: 12px;
-            color: var(--subtle);
-            margin-bottom: 10px
-        }
-
-        .bar {
-            height: 5px;
-            background: #eee;
-            border-radius: 3px;
-            overflow: hidden
-        }
-
-        .bar-fill {
+        .skills-container .reveal {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 3px;
-            width: 0;
-            transition: width 1.2s cubic-bezier(.25, .46, .45, .94)
+        }
+
+        .apple-card {
+            background: var(--surface);
+            border-radius: 28px;
+            padding: 40px;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease;
+            position: relative;
+            z-index: 1;
+            transform: translateY(0) rotateX(0) rotateY(0);
+            will-change: transform, box-shadow;
+        }
+
+        .reveal:nth-child(1) .apple-card {
+            transform: rotateX(2deg) rotateY(-2deg) translateY(0);
+        }
+
+        .reveal:nth-child(2) .apple-card {
+            transform: rotateX(2deg) rotateY(2deg) translateY(20px);
+        }
+
+        .reveal:nth-child(3) .apple-card {
+            transform: rotateX(-2deg) rotateY(-2deg) translateY(-10px);
+        }
+
+        .reveal:nth-child(4) .apple-card {
+            transform: rotateX(-2deg) rotateY(2deg) translateY(10px);
+        }
+
+        .reveal:nth-child(5) .apple-card {
+            transform: rotateX(2deg) rotateY(-2deg) translateY(-5px);
+        }
+
+        .reveal:nth-child(6) .apple-card {
+            transform: rotateX(-2deg) rotateY(2deg) translateY(15px);
+        }
+
+        .apple-card-subtitle {
+            font-family: var(--display);
+            font-size: 14px;
+            color: var(--subtle);
+            margin-bottom: 8px;
+        }
+
+        .apple-card-title {
+            font-family: var(--heading);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .apple-card-desc {
+            font-size: 15px;
+            color: var(--subtle);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .apple-card-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .apple-card-list li {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .apple-card-list li i {
+            color: var(--primary);
+            font-size: 8px;
+            margin-right: 12px;
+            opacity: 0.8;
         }
 
         /* ── About ── */
@@ -886,15 +910,19 @@
             .projects-grid {
                 grid-template-columns: 1fr
             }
+
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+
+            .reveal:nth-child(n) .apple-card {
+                transform: rotateX(0) rotateY(0) translateY(0);
+            }
         }
 
         @media(max-width:480px) {
             .hero-name {
                 font-size: 42px
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr 1fr
             }
         }
     </style>
@@ -947,7 +975,88 @@
     <!-- Skills -->
     <section class="section" id="skills">
         <span class="section-label reveal" style="margin-bottom: 44px;">What I work with</span>
-        <div class="skills-grid" id="skillsGrid"></div>
+        <div class="skills-container">
+            <div class="reveal">
+                <div class="apple-card">
+                    <div class="apple-card-subtitle">Core Competencies</div>
+                    <h3 class="apple-card-title">01. Key Skills</h3>
+                    <p class="apple-card-desc">Applying statistical rigor, meticulous data cleaning, and exploratory
+                        analysis to communicate insights effectively.</p>
+                    <ul class="apple-card-list">
+                        <li><i class="fa-solid fa-circle"></i> Statistics</li>
+                        <li><i class="fa-solid fa-circle"></i> Data Cleaning</li>
+                        <li><i class="fa-solid fa-circle"></i> EDA</li>
+                        <li><i class="fa-solid fa-circle"></i> Communication</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay: 0.1s;">
+                <div class="apple-card">
+                    <div class="apple-card-subtitle">Uncovering Patterns</div>
+                    <h3 class="apple-card-title">02. Data Analysis</h3>
+                    <p class="apple-card-desc">Cleaning, processing, and exploring data to answer critical business
+                        questions.</p>
+                    <ul class="apple-card-list">
+                        <li><i class="fa-solid fa-circle"></i> Python Pandas</li>
+                        <li><i class="fa-solid fa-circle"></i> NumPy</li>
+                        <li><i class="fa-solid fa-circle"></i> Microsoft Excel</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay: 0.2s;">
+                <div class="apple-card">
+                    <div class="apple-card-subtitle">Storing & Querying</div>
+                    <h3 class="apple-card-title">03. Database</h3>
+                    <p class="apple-card-desc">Designing, managing, and querying relational databases to handle
+                        large-scale information securely.</p>
+                    <ul class="apple-card-list">
+                        <li><i class="fa-solid fa-circle"></i> MySQL</li>
+                        <li><i class="fa-solid fa-circle"></i> PostgreSQL</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay: 0.3s;">
+                <div class="apple-card">
+                    <div class="apple-card-subtitle">Sourcing Data</div>
+                    <h3 class="apple-card-title">04. Data Gathering</h3>
+                    <p class="apple-card-desc">Building automated scripts to scrape and compile data from across the
+                        web.</p>
+                    <ul class="apple-card-list">
+                        <li><i class="fa-solid fa-circle"></i> Web Scraping</li>
+                        <li><i class="fa-solid fa-circle"></i> Beautiful Soup</li>
+                        <li><i class="fa-solid fa-circle"></i> Selenium</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay: 0.4s;">
+                <div class="apple-card">
+                    <div class="apple-card-subtitle">Presenting Insights</div>
+                    <h3 class="apple-card-title">05. Data Visualisation</h3>
+                    <p class="apple-card-desc">Transforming complex datasets into clear, actionable, and interactive
+                        visual narratives.</p>
+                    <ul class="apple-card-list">
+                        <li><i class="fa-solid fa-circle"></i> Streamlit</li>
+                        <li><i class="fa-solid fa-circle"></i> Power BI</li>
+                        <li><i class="fa-solid fa-circle"></i> Tableau</li>
+                        <li><i class="fa-solid fa-circle"></i> Matplotlib & Seaborn</li>
+                        <li><i class="fa-solid fa-circle"></i> Plotly</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="reveal" style="transition-delay: 0.5s;">
+                <div class="apple-card">
+                    <div class="apple-card-subtitle">Future Ready</div>
+                    <h3 class="apple-card-title">06. Learning Now</h3>
+                    <p class="apple-card-desc">Expanding my analytical toolkit with advanced predictive modeling
+                        techniques.</p>
+                    <ul class="apple-card-list">
+                        <li><i class="fa-solid fa-circle"></i> Machine Learning</li>
+                        <li><i class="fa-solid fa-circle"></i> Deep Learning</li>
+                        <li><i class="fa-solid fa-circle"></i> NO SQL</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- About -->
@@ -1038,7 +1147,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 Karan <span>Sharma</span>. Crafted with precision & data.</p>
+        <p>&copy; 2026 Karan <span>Sharma</span>. Crafted with precision & data.</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -1084,25 +1193,6 @@
 
         // ── Data ──
 
-        const skills = [
-            { icon: '🐍', name: 'Python', level: 'Advanced', pct: 90 },
-            { icon: '🐼', name: 'Pandas', level: 'Advanced', pct: 88 },
-            { icon: '🔢', name: 'NumPy', level: 'Advanced', pct: 85 },
-            { icon: '📊', name: 'SciPy', level: 'Intermediate', pct: 75 },
-            { icon: '🗄️', name: 'PostgreSQL', level: 'Advanced', pct: 85 },
-            { icon: '🐬', name: 'MySQL', level: 'Intermediate', pct: 78 },
-            { icon: '📈', name: 'Power BI', level: 'Advanced', pct: 88 },
-            { icon: '📉', name: 'Tableau', level: 'Advanced', pct: 85 },
-            { icon: '🔍', name: 'Power Query', level: 'Intermediate', pct: 80 },
-            { icon: '📐', name: 'Plotly', level: 'Advanced', pct: 82 },
-            { icon: '🎨', name: 'Matplotlib', level: 'Intermediate', pct: 80 },
-            { icon: '🌊', name: 'Seaborn', level: 'Intermediate', pct: 78 },
-            { icon: '📏', name: 'Inferential Stats', level: 'Advanced', pct: 86 },
-            { icon: '🧹', name: 'Data Cleaning', level: 'Advanced', pct: 88 },
-            { icon: '🧠', name: 'EDA', level: 'Advanced', pct: 85 },
-            { icon: '📋', name: 'Excel', level: 'Advanced', pct: 84 },
-        ];
-
         const projects = [
             {
                 title: 'What Makes a Game Successful on STEAM',
@@ -1134,25 +1224,8 @@
                     { name: 'Watch Walkthrough on YouTube', url: 'https://youtu.be/bFbA_kTIujQ', icon: 'fa-brands fa-youtube' },
                     { name: 'Download .pbix File', url: 'AI_adoption.pbix', icon: 'fa-solid fa-file-arrow-down', download: true }
                 ]
-            },
-            { title: 'Brazilian E-Commerce Sales Analysis', desc: 'Explored the Olist public dataset to uncover regional sales patterns, delivery performance bottlenecks, and customer satisfaction drivers across Brazilian states.', tags: ['Python', 'Pandas', 'Plotly', 'PostgreSQL'], links: [] },
-            { title: 'COVID-19 Data Exploration', desc: 'Tracked pandemic trends across countries using time-series analysis, rolling averages, and interactive dashboards to visualise infection and vaccination rates.', tags: ['Python', 'Plotly', 'Pandas', 'NumPy'], links: [] },
-            { title: 'HR Employee Attrition Dashboard', desc: 'Designed an interactive Power BI dashboard to help HR teams identify attrition risk factors such as overtime, job satisfaction, and tenure patterns.', tags: ['Power BI', 'DAX', 'Power Query', 'Excel'], links: [] },
-            { title: 'Credit Risk Assessment', desc: 'Developed a scoring model to assess loan default probability using statistical tests, correlation analysis, and weighted risk indicators.', tags: ['Python', 'SciPy', 'Pandas', 'Matplotlib'], links: [] },
-            { title: 'Social Media Sentiment Tracker', desc: 'Analysed tweet sentiment around product launches using NLP techniques, visualising public opinion shifts over time with interactive charts.', tags: ['Python', 'NLTK', 'Plotly', 'Pandas'], links: [] },
-            { title: 'Weather & Climate Pattern Analysis', desc: 'Examined 50 years of meteorological data to identify climate trends, seasonal anomalies, and temperature distribution shifts using inferential statistics.', tags: ['Python', 'SciPy', 'Seaborn', 'NumPy'], links: [] },
-            { title: 'Retail Sales Forecasting Dashboard', desc: 'Built an end-to-end sales forecasting pipeline for a retail chain, combining time-series decomposition with interactive Tableau dashboards to predict quarterly revenue trends.', tags: ['Python', 'Tableau', 'Pandas', 'Excel'], links: [] },
+            }
         ];
-
-        // ── Render Skills ──
-        const skillsGrid = document.getElementById('skillsGrid');
-        skills.forEach((s, i) => {
-            const card = document.createElement('div');
-            card.className = 'skill-card reveal';
-            card.style.transitionDelay = `${i * 0.05}s`;
-            card.innerHTML = `<div class="spot"></div><span class="skill-icon">${s.icon}</span><div class="skill-name">${s.name}</div><div class="skill-level">${s.level}</div><div class="bar"><div class="bar-fill" data-pct="${s.pct}"></div></div>`;
-            skillsGrid.appendChild(card);
-        });
 
         // ── Render Projects ──
         const projectsGrid = document.getElementById('projectsGrid');
@@ -1219,15 +1292,7 @@
 
         // ── Render Blogs ──
         const blogTopics = [
-            { title: 'What Makes a Game Successful on STEAM', link: 'https://drive.google.com/file/d/1Y8FC9G-q1Qy_1mJgVJGYa6xreauq96lm/view', color: '#FFE8CC', image: 'steam.png' },
-            { title: 'Customer Churn Analysis', link: 'blogs.html#churn-analysis', color: '#D4EDDA' },
-            { title: 'Brazilian E-Commerce Sales Analysis', link: 'blogs.html#brazil-ecommerce', color: '#CCE5FF' },
-            { title: 'COVID-19 Data Exploration', link: 'blogs.html#covid-data', color: '#F5D5CB' },
-            { title: 'HR Employee Attrition Dashboard', link: 'blogs.html#hr-attrition', color: '#E8DAEF' },
-            { title: 'Credit Risk Assessment', link: 'blogs.html#credit-risk', color: '#D5F5E3' },
-            { title: 'Social Media Sentiment Tracker', link: 'blogs.html#sentiment-tracker', color: '#FDEBD0' },
-            { title: 'Weather & Climate Pattern Analysis', link: 'blogs.html#weather-climate', color: '#D6EAF8' },
-            { title: 'Retail Sales Forecasting Dashboard', link: 'blogs.html#retail-forecast', color: '#E8F8F5' },
+            { title: 'What Makes a Game Successful on STEAM', link: 'https://drive.google.com/file/d/1Y8FC9G-q1Qy_1mJgVJGYa6xreauq96lm/view', color: '#FFE8CC', image: 'steam.png' }
         ];
         const blogsGrid = document.getElementById('blogsGrid');
         blogTopics.forEach((b, i) => {
@@ -1249,14 +1314,29 @@
             entries.forEach(e => {
                 if (e.isIntersecting) {
                     e.target.classList.add('visible');
-                    // Animate skill bars
-                    e.target.querySelectorAll('.bar-fill').forEach(bar => {
-                        bar.style.width = bar.dataset.pct + '%';
-                    });
                 }
             });
         }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
         document.querySelectorAll('.reveal,.scroll-card').forEach(el => observer.observe(el));
+
+        // ── Apple-style Magnetic Cards ──
+        document.querySelectorAll('.apple-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                if (window.innerWidth <= 768) return;
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                card.style.transform = `translate(${x * 0.05}px, ${y * 0.05}px) rotateX(${-y * 0.02}deg) rotateY(${x * 0.02}deg) scale(1.02)`;
+                card.style.boxShadow = `0 30px 60px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.06)`;
+                card.style.zIndex = 10;
+            });
+            card.addEventListener('mouseleave', () => {
+                if (window.innerWidth <= 768) return;
+                card.style.transform = '';
+                card.style.boxShadow = '';
+                card.style.zIndex = 1;
+            });
+        });
 
         // ── Spotlight Effect on Cards ──
         document.querySelectorAll('.project-card').forEach(card => {
